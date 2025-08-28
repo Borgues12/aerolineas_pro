@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/// FDVFDVD
 public class Conexion {
     // Detalles de la conexión a la base de datos
     private static final String URL = "jdbc:mysql://localhost:3306/aerolinea_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
