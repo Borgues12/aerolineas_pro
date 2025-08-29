@@ -8,12 +8,6 @@ public class Pasajeros {
     public Pasajeros() {
     }
 
-    public Pasajeros(int id, String nombre, String cedula) {
-        this.id = id;
-        this.nombre = nombre;
-        this.cedula = cedula;
-    }
-
     public Pasajeros(String nombre, String cedula) {
         this.nombre = nombre;
         this.cedula = cedula;

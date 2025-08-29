@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PasajerosDAO {
+public class PasajerosDAO implements IntPasajeros {
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
