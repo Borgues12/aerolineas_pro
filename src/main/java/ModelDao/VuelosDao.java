@@ -13,39 +13,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VuelosDao implements IntVuelo {
-    public class AvionesDao implements IntAviones {
         config.Conexion cn = new config.Conexion();
         Connection con;
         PreparedStatement ps;
         ResultSet rs;
 
-        @Override
-        public List<Vuelos> todoslosVuelos() {
-            List<Vuelos> lista_vuelos = new ArrayList<>();
-            try {
-                con = cn.getConnection();
-                ps = con.prepareStatement(
-                        "SELECT * FROM vuelo"
+    @Override
+    public List<Vuelos> todosLosVuelos() {
+        List<Vuelos> lista_vuelos = new ArrayList<>();
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(
+                    "SELECT v.*, a.modelo AS modelo FROM vuelo v LEFT JOIN avion a ON v.id_avion = a.id_avion"
+            );
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Vuelos v = new Vuelos(
+                        rs.getString("origen"),
+                        rs.getString("destino"),
+                        rs.getDate("fecha"),
+                        rs.getString("estado_vuelo"),
+                        rs.getInt("id_avion")
                 );
-                rs = ps.executeQuery();
-                while (rs.next()) {
-                    Vuelos v = new Vuelos();
-                    v.setId_vuelo(rs.getInt("id_vuelo"));
-                    v.setOrigen(rs.getString("origen"));
-                    v.setDestino(rs.getString("destino"));
-                    v.setFecha(rs.getDate("fecha"));
-                    v.setEstado_vuelo(rs.getString("estado_vuelo"));
-                    v.setId_avion(rs.getInt("id_avion"));
-                    lista_vuelos.add(v);
-                }
-            } catch (Exception e) {
-                System.out.println("Error al listar aviones: " + e.getMessage());
+                v.setNombre_avion(rs.getString("modelo"));
+                lista_vuelos.add(v);
             }
-            return lista_vuelos;
+        } catch (Exception e) {
+            System.out.println("Error al listar vuelos: " + e.getMessage());
+        } finally {
+            config.Conexion.closeResources(con, ps, rs);
         }
+        return lista_vuelos;
+    }
 
-        @Override
-        public Aviones obtenerAvionporId(int id_avion) {
+
+    @Override
+        public Vuelos obtenerVueloPorId(int id_vuelo) {
             Aviones a = null;
             try {
                 con = cn.getConnection();
