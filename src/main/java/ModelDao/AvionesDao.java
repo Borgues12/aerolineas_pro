@@ -97,7 +97,7 @@ public class AvionesDao implements IntAviones {
         }
     }
     @Override
-    public boolean cambiarEstadoAvion(int id_avion, String estado) {
+    public boolean cambiarEstadoAvion(int id_avion, String estado_avion) {
         String sql = "UPDATE avion SET ESTADO_AVION = CASE WHEN ESTADO_AVION = 'ACTIVO' THEN 'INACTIVO' ELSE 'Activo' END WHERE ID_AVION = ?";
         try {
             con = cn.getConnection();
