@@ -1,5 +1,6 @@
 package ModelDao;
 
+import Config.Conexion;
 import Interfaces.IntAviones;
 
 import MODEL.Aviones;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AvionesDao implements IntAviones {
-    config.Conexion cn = new config.Conexion();
+    Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
@@ -97,7 +98,7 @@ public class AvionesDao implements IntAviones {
         }
     }
     @Override
-    public boolean cambiarEstadoAvion(int id_avion, String estado_avion) {
+    public boolean cambiarEstadoAvion(int id_avion) {
         String sql = "UPDATE avion SET ESTADO_AVION = CASE WHEN ESTADO_AVION = 'ACTIVO' THEN 'INACTIVO' ELSE 'Activo' END WHERE ID_AVION = ?";
         try {
             con = cn.getConnection();

@@ -1,97 +1,113 @@
-package dao;
+package ModelDao;
 
-import model.Pasajeros;
-import config.Conexion;
-import java.sql.*;
+import Config.Conexion;
+import Interfaces.IntPasajeros;
+import MODEL.Aviones;
+import MODEL.Pasajeros;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PasajerosDAO implements IntPasajeros {
+public class PasajerosDao implements IntPasajeros {
+    Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
 
-    public boolean insertar(Pasajeros pasajero) {
-        String sql = "INSERT INTO pasajero (nombre, cedula) VALUES (?, ?)";
+    @Override
+    public List<Pasajeros> todosLosPasajeros() {
+        List<Pasajeros> lista_pasajeros = new ArrayList<>();
         try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, pasajero.getNombre());
-            ps.setString(2, pasajero.getCedula());
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Error al insertar pasajero: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public List<Pasajeros> listar() {
-        List<Pasajeros> lista = new ArrayList<>();
-        String sql = "SELECT * FROM pasajero";
-        try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
+            con = cn.getConnection();
+            ps = con.prepareStatement(
+                    "SELECT * FROM pasajero"
+            );
             rs = ps.executeQuery();
             while (rs.next()) {
                 Pasajeros p = new Pasajeros();
-                p.setId(rs.getInt("id"));
-                p.setNombre(rs.getString("nombre"));
+                p.setId_pasajero(rs.getInt("id_pasajero"));
+                p.setNombre_pasajero(rs.getString("nombre_pasajero"));
                 p.setCedula(rs.getString("cedula"));
-                lista.add(p);
+                p.setEstado_pasajero(rs.getString("estado_pasajero"));
+                lista_pasajeros.add(p);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("Error al listar pasajeros: " + e.getMessage());
         }
-        return lista;
+        return lista_pasajeros;
     }
 
-    public Pasajeros obtenerPorId(int id) {
-        String sql = "SELECT * FROM pasajero WHERE id = ?";
+    @Override
+    public Pasajeros obtenerPasajeroPorCedula(String cedula) {
         Pasajeros p = null;
         try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            con = cn.getConnection();
+            ps = con.prepareStatement(
+                    "SELECT * FROM pasajero WHERE cedula = ?"
+            );
+            ps.setString(1,cedula);
             rs = ps.executeQuery();
             if (rs.next()) {
                 p = new Pasajeros();
-                p.setId(rs.getInt("id"));
-                p.setNombre(rs.getString("nombre"));
+                p.setId_pasajero(rs.getInt("id_pasajero"));
+                p.setNombre_pasajero(rs.getString("nombre_pasajero"));
                 p.setCedula(rs.getString("cedula"));
+                p.setEstado_pasajero(rs.getString("estado_pasajero"));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("Error al obtener pasajero: " + e.getMessage());
         }
         return p;
     }
 
-    public boolean actualizar(Pasajeros pasajero) {
-        String sql = "UPDATE pasajero SET nombre = ?, cedula = ? WHERE id = ?";
+    @Override
+    public boolean agregarPasajero(Pasajeros pasajeros) {
+        String sql = "INSERT INTO pasajero (nombre_pasajero, cedula, estado_pasajero) VALUES (?, ?, ?)";
         try {
-            con = Conexion.getConnection();
+            con = cn.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, pasajero.getNombre());
-            ps.setString(2, pasajero.getCedula());
-            ps.setInt(3, pasajero.getId());
+            ps.setString(1, pasajeros.getNombre_pasajero());
+            ps.setString(2, pasajeros.getCedula());
+            ps.setString(3, pasajeros.getEstado_pasajero());
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar pasajero: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error al agregar pasajero: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean eliminar(int id) {
-        String sql = "DELETE FROM pasajero WHERE id = ?";
+    @Override
+    public boolean actualizarPasajero(String cedula, Pasajeros pasajeros) {
+        String sql = "UPDATE pasajero SET nombre_pasajero = ?, cedula = ?, estado_pasajero = ? WHERE cedula = ?";
         try {
-            con = Conexion.getConnection();
+            con = cn.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setString(1, pasajeros.getNombre_pasajero());
+            ps.setString(2, pasajeros.getCedula());
+            ps.setString(3, pasajeros.getEstado_pasajero());
+            ps.setString(4, cedula);
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) {
-            System.out.println("Error al el iminar pasajero: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error al actualizar pasajero: " + e.getMessage());
+            return false;
+        }
+    }
+    @Override
+    public boolean cambiarEstadoPasajero(int id_pasajero) {
+        String sql = "UPDATE pasajero SET estado_pasajero = CASE WHEN estado_pasajero = 'ACTIVO' THEN 'INACTIVO' ELSE 'Activo' END WHERE id_pasajero = ?";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id_pasajero);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error al cambiar estado de pasajero: " + e.getMessage());
             return false;
         }
     }

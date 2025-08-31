@@ -1,32 +1,34 @@
 package MODEL;
 
 public class Pasajeros {
-    private int id;
-    private String nombre;
+    private int id_pasajero;
+    private String nombre_pasajero;
     private String cedula;
+    private String estado_pasajero;
 
     public Pasajeros() {
     }
 
-    public Pasajeros(String nombre, String cedula) {
-        this.nombre = nombre;
+    public Pasajeros(String nombre_pasajero, String cedula, String estado_pasajero) {
+        this.nombre_pasajero = nombre_pasajero;
         this.cedula = cedula;
+        this.estado_pasajero = estado_pasajero;
     }
 
-    public int getId() {
-        return id;
+    public int getId_pasajero() {
+        return id_pasajero;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId_pasajero(int id_pasajero) {
+        this.id_pasajero = id_pasajero;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombre_pasajero() {
+        return nombre_pasajero;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre_pasajero(String nombre_pasajero) {
+        this.nombre_pasajero = nombre_pasajero;
     }
 
     public String getCedula() {
@@ -37,12 +39,15 @@ public class Pasajeros {
         this.cedula = cedula;
     }
 
-    @Override
-    public String toString() {
-        return "Pasajeros{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", cedula='" + cedula + '\'' +
-                '}';
+    public String getEstado_pasajero() {
+        return estado_pasajero;
+    }
+
+    public void setEstado_pasajero(String estado_pasajero) {
+        this.estado_pasajero = estado_pasajero;
     }
 }
+
+
+
+

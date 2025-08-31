@@ -9,5 +9,5 @@ public interface IntAviones {
     public Aviones obtenerAvionporId(int id_avion);
     public boolean agregarAvion(Aviones avion);
     public boolean actualizarAvion(int id_avion, Aviones avion);
-    public boolean cambiarEstadoAvion(int id_avion, String estado);
+    public boolean cambiarEstadoAvion(int id_avion);
 }
